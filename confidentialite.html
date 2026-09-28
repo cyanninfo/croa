@@ -13,6 +13,8 @@
   body { margin: 0; background: var(--bg); color: var(--text);
          font: 16px/1.6 "Nunito Sans", "Segoe UI", system-ui, sans-serif; }
   header { background: #0B1D3A; color: #fff; padding: 32px 16px; }
+  .brand { max-width: 760px; margin: 0 auto; display: flex; align-items: center; gap: 16px; }
+  .brand svg { width: 64px; height: 64px; flex-shrink: 0; border-radius: 14px; }
   header h1 { margin: 0; font: 800 28px/1.2 Montserrat, "Segoe UI", sans-serif; }
   header h1 span { color: var(--accent); }
   header p { margin: 8px 0 0; color: #AFC0DC; }
@@ -27,8 +29,43 @@
 </head>
 <body>
 <header>
-  <h1>CRO<span>A</span> — Politique de confidentialité</h1>
-  <p>Compte Rendu Optimisé d'Activité · Dernière mise à jour : 28 septembre 2026</p>
+  <div class="brand">
+    <!-- Icône CROA (logo), intégrée pour que la page reste autonome. -->
+    <svg viewBox="0 0 512 512" role="img" aria-label="Logo CROA">
+      <rect width="512" height="512" rx="110" fill="#F4F6FA"/>
+      <g transform="translate(0,-26)">
+        <polyline points="165,392 222,440 410,318" fill="none" stroke="#F28C28" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+        <g stroke="#0B1D3A" stroke-width="7" stroke-linecap="round">
+          <line x1="262" y1="360" x2="266" y2="408"/>
+          <line x1="288" y1="355" x2="292" y2="392"/>
+        </g>
+        <polygon points="180,260 218,332 92,362" fill="#12294F"/>
+        <polygon points="218,332 235,365 92,362" fill="#0B1D3A"/>
+        <polygon points="205,205 270,190 255,290" fill="#1A3566"/>
+        <polygon points="270,190 320,228 255,290" fill="#0B1D3A"/>
+        <polygon points="320,228 338,295 255,290" fill="#12294F"/>
+        <polygon points="338,295 300,362 255,290" fill="#1A3566"/>
+        <polygon points="300,362 235,365 255,290" fill="#0B1D3A"/>
+        <polygon points="205,205 255,290 180,260" fill="#12294F"/>
+        <polygon points="180,260 255,290 235,365" fill="#0B1D3A"/>
+        <polygon points="210,235 300,272 282,335 138,346" fill="#2A4E8C"/>
+        <polygon points="210,235 282,335 138,346" fill="#1F3F75"/>
+        <polygon points="215,150 275,118 270,190" fill="#12294F"/>
+        <polygon points="275,118 330,150 270,190" fill="#1A3566"/>
+        <polygon points="330,150 335,192 270,190" fill="#0B1D3A"/>
+        <polygon points="335,192 320,228 270,190" fill="#12294F"/>
+        <polygon points="215,150 270,190 205,205" fill="#0B1D3A"/>
+        <polygon points="328,150 422,176 335,173" fill="#1F3F75"/>
+        <polygon points="335,173 422,176 335,193" fill="#0B1D3A"/>
+        <circle cx="296" cy="160" r="10" fill="#F4F6FA"/>
+        <circle cx="298" cy="160" r="4.5" fill="#0B1D3A"/>
+      </g>
+    </svg>
+    <div>
+      <h1>CRO<span>A</span> — Politique de confidentialité</h1>
+      <p>Compte Rendu Optimisé d'Activité · Dernière mise à jour : 28 septembre 2026</p>
+    </div>
+  </div>
 </header>
 <main>
   <section>
