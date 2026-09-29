@@ -3,19 +3,301 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CROA</title>
+<title>CROA – Compte rendu d'activité</title>
+<meta name="description" content="CROA, l'application Android des indépendants : saisissez vos temps en 1 clic et éditez votre compte rendu d'activité mensuel en PDF. Sans compte, sans publicité, vos données restent sur votre téléphone.">
+<meta property="og:title" content="CROA – Compte rendu d'activité">
+<meta property="og:description" content="Vos temps en 1 clic. Votre compte rendu d'activité en PDF.">
+<meta property="og:image" content="https://cyanninfo.github.io/croa/img/og.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="img/icone.png">
 <style>
-  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #0B1D3A; color: #fff;
-         font: 16px/1.6 "Segoe UI", system-ui, sans-serif; text-align: center; padding: 16px; }
-  h1 { margin: 0; font-size: 40px; letter-spacing: 4px; } h1 span { color: #F28C28; }
-  p { color: #AFC0DC; } a { color: #F28C28; }
+  /* Polices hébergées ici : aucune requête vers un service tiers. */
+  @font-face { font-family: M; src: url(fonts/Montserrat-ExtraBold.ttf); font-weight: 800; font-display: swap; }
+  @font-face { font-family: M; src: url(fonts/Montserrat-Bold.ttf); font-weight: 700; font-display: swap; }
+  @font-face { font-family: N; src: url(fonts/NunitoSans-Regular.ttf); font-weight: 400; font-display: swap; }
+  @font-face { font-family: N; src: url(fonts/NunitoSans-SemiBold.ttf); font-weight: 600; font-display: swap; }
+
+  :root {
+    --navy: #0B1D3A; --navy2: #12294F; --orange: #F28C28;
+    --bg: #F4F6FA; --card: #FFFFFF; --text: #0B1D3A; --muted: #5A6782; --rule: #D5DCE8; --chip: #E8EDF5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0A111F; --card: #152036; --text: #E8EDF5; --muted: #9AA8C2; --rule: #2A3752; --chip: #1C2A45; }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.6 N, "Segoe UI", system-ui, sans-serif; }
+  a { color: var(--orange); }
+  img { max-width: 100%; height: auto; display: block; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+  /* En-tête */
+  .top { background: var(--navy); color: #fff; }
+  nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 0; }
+  .brand { display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; font: 800 24px/1 M; letter-spacing: 1px; }
+  .brand .mark { width: 44px; height: 44px; border-radius: 12px; background: #F4F6FA; flex-shrink: 0; }
+  .brand .name span { color: var(--orange); }
+  nav .links { display: flex; gap: 22px; font: 700 15px/1 M; }
+  nav .links a { color: #AFC0DC; text-decoration: none; }
+  nav .links a:hover { color: #fff; }
+
+  .hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; padding: 48px 0 72px; }
+  .hero h1 { margin: 0; font: 800 54px/1.1 M; }
+  .hero h1 b { color: var(--orange); font-weight: 800; }
+  .hero p.lead { margin: 22px 0 30px; color: #C9D5EA; font-size: 20px; max-width: 34em; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border-radius: 14px;
+         font: 700 16px/1 M; text-decoration: none; }
+  .btn.primary { background: var(--orange); color: var(--navy); }
+  .btn.ghost { border: 2px solid #33507F; color: #fff; }
+  .soon { margin-top: 18px; color: #8FA3C4; font-size: 15px; }
+  .hero .shot { justify-self: center; }
+
+  /* Téléphone */
+  .phone { width: 300px; max-width: 100%; border-radius: 40px; border: 10px solid #1C2F52; background: #000;
+           overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,.35); }
+  .phone.small { width: 260px; }
+  /* Accueil : clair devant, sombre derrière */
+  .duo { position: relative; width: 400px; height: 620px; }
+  .duo .phone { position: absolute; width: 250px; }
+  .duo .back { right: 0; top: 0; transform: rotate(6deg); opacity: .95; }
+  .duo .front { left: 0; top: 40px; transform: rotate(-4deg); }
+
+  /* Fonctionnalités */
+  section { padding: 72px 0; }
+  .eyebrow { font: 800 14px/1 M; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin: 0 0 12px; }
+  h2 { margin: 0 0 16px; font: 800 36px/1.15 M; }
+  .feature { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .feature + .feature { margin-top: 88px; }
+  .feature.flip .text { order: 2; }
+  .feature .media { justify-self: center; }
+  .feature p { color: var(--muted); margin: 0 0 14px; }
+  .feature ul { margin: 0; padding-left: 20px; color: var(--muted); }
+  .feature li { margin: 6px 0; }
+  .notif { width: 420px; max-width: 100%; border-radius: 22px; box-shadow: 0 20px 50px rgba(0,0,0,.3); }
+  .stack { display: grid; gap: 22px; justify-items: center; }
+
+  /* Grille « et aussi » */
+  .alt { background: var(--card); }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 28px; }
+  .tile { background: var(--bg); border-radius: 18px; padding: 22px; }
+  .tile h3 { margin: 0 0 6px; font: 700 18px/1.3 M; }
+  .tile p { margin: 0; color: var(--muted); font-size: 16px; }
+
+  /* Confidentialité */
+  .privacy { background: var(--navy); color: #fff; }
+  .privacy h2 { color: #fff; }
+  .privacy .grid .tile { background: var(--navy2); }
+  .privacy .tile p { color: #AFC0DC; }
+  .privacy .more { margin-top: 26px; color: #AFC0DC; }
+
+  /* Tester */
+  .test { text-align: center; }
+  .test p { color: var(--muted); max-width: 40em; margin: 0 auto 26px; }
+
+  footer { border-top: 1px solid var(--rule); padding: 28px 0 40px; color: var(--muted); font-size: 15px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; }
+  footer a { color: var(--muted); }
+
+  @media (max-width: 820px) {
+    nav .links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 24px 0 56px; gap: 36px; text-align: center; }
+    .hero h1 { font-size: 38px; }
+    .hero p.lead { font-size: 18px; margin-left: auto; margin-right: auto; }
+    .cta { justify-content: center; }
+    section { padding: 56px 0; }
+    h2 { font-size: 28px; }
+    .feature { grid-template-columns: 1fr; gap: 28px; }
+    .feature.flip .text { order: 0; }
+    .feature + .feature { margin-top: 64px; }
+    .grid { grid-template-columns: 1fr; }
+    .phone { width: 250px; }
+    .duo { width: 300px; height: 480px; margin: 0 auto; }
+    .duo .phone { width: 190px; border-width: 8px; border-radius: 30px; }
+  }
 </style>
 </head>
 <body>
+
+<header class="top">
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="#">
+        <!-- Logo CROA, intégré pour que la page reste autonome. -->
+        <svg class="mark" viewBox="0 0 512 512" aria-hidden="true">
+          <g transform="translate(256,256) scale(1.12) translate(-256,-256)"><g transform="translate(0,-26)">
+            <polyline points="165,392 222,440 410,318" fill="none" stroke="#F28C28" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+            <g stroke="#0B1D3A" stroke-width="7" stroke-linecap="round"><line x1="262" y1="360" x2="266" y2="408"/><line x1="288" y1="355" x2="292" y2="392"/></g>
+            <polygon points="180,260 218,332 92,362" fill="#12294F"/><polygon points="218,332 235,365 92,362" fill="#0B1D3A"/>
+            <polygon points="205,205 270,190 255,290" fill="#1A3566"/><polygon points="270,190 320,228 255,290" fill="#0B1D3A"/>
+            <polygon points="320,228 338,295 255,290" fill="#12294F"/><polygon points="338,295 300,362 255,290" fill="#1A3566"/>
+            <polygon points="300,362 235,365 255,290" fill="#0B1D3A"/><polygon points="205,205 255,290 180,260" fill="#12294F"/>
+            <polygon points="180,260 255,290 235,365" fill="#0B1D3A"/><polygon points="210,235 300,272 282,335 138,346" fill="#2A4E8C"/>
+            <polygon points="210,235 282,335 138,346" fill="#1F3F75"/><polygon points="215,150 275,118 270,190" fill="#12294F"/>
+            <polygon points="275,118 330,150 270,190" fill="#1A3566"/><polygon points="330,150 335,192 270,190" fill="#0B1D3A"/>
+            <polygon points="335,192 320,228 270,190" fill="#12294F"/><polygon points="215,150 270,190 205,205" fill="#0B1D3A"/>
+            <polygon points="328,150 422,176 335,173" fill="#1F3F75"/><polygon points="335,173 422,176 335,193" fill="#0B1D3A"/>
+            <circle cx="296" cy="160" r="10" fill="#F4F6FA"/><circle cx="298" cy="160" r="4.5" fill="#0B1D3A"/>
+          </g></g>
+        </svg>
+        <span class="name">CRO<span>A</span></span>
+      </a>
+      <div class="links">
+        <a href="#fonctionnalites">Fonctionnalités</a>
+        <a href="#confidentialite">Vos données</a>
+        <a href="#tester">Tester</a>
+      </div>
+    </nav>
+
+    <div class="hero">
+      <div>
+        <h1>Vos temps en <b>1&nbsp;clic</b>.<br>Votre compte rendu en <b>PDF</b>.</h1>
+        <p class="lead">CROA (Compte Rendu Optimisé d'Activité) est l'application Android des indépendants,
+          freelances et consultants : notez vos jours ou vos heures chaque soir, et votre compte rendu
+          d'activité mensuel est prêt à envoyer au client.</p>
+        <div class="cta">
+          <a class="btn primary" href="#tester">Devenir testeur</a>
+          <a class="btn ghost" href="#fonctionnalites">Découvrir</a>
+        </div>
+        <p class="soon">Bientôt sur Google Play · Gratuite, sans publicité, sans compte à créer</p>
+      </div>
+      <div class="shot duo">
+        <img class="phone back" src="img/sombre.jpg" width="600" height="1200"
+             alt="Écran Aujourd'hui en mode sombre">
+        <img class="phone front" src="img/aujourdhui.jpg" width="600" height="1200"
+             alt="Écran Aujourd'hui : boutons 0,25, 0,5, 0,75 et 1 jour pour saisir le temps d'un projet">
+      </div>
+    </div>
+  </div>
+</header>
+
 <main>
-  <h1>CRO<span>A</span></h1>
-  <p>Compte Rendu Optimisé d'Activité</p>
-  <p><a href="confidentialite.html">Politique de confidentialité</a> · <a href="mailto:cyanninfo@gmail.com">Contact</a></p>
+  <section id="fonctionnalites">
+    <div class="wrap">
+
+      <div class="feature">
+        <div class="text">
+          <p class="eyebrow">Saisie</p>
+          <h2>Au jour le jour, ou tout le mois d'un coup</h2>
+          <p>À l'ouverture, vos projets du jour sont prêts : touchez 0,25 · 0,5 · 0,75 · 1 jour,
+             ou 1 à 8 heures, et c'est noté. Un retard ? La grille du mois se remplit en quelques
+             gestes, avec le total et le montant recalculés en direct.</p>
+          <ul>
+            <li>Plusieurs projets par jour, note facultative</li>
+            <li>Journée de congé en un interrupteur</li>
+            <li>Valeur libre si besoin, sans arrondi imposé</li>
+          </ul>
+        </div>
+        <div class="media">
+          <img class="phone small" src="img/grille.jpg" width="600" height="1200" loading="lazy"
+               alt="Grille de septembre d'un projet : 18,75 jours, 10 312,50 € HT">
+        </div>
+      </div>
+
+      <div class="feature flip">
+        <div class="text">
+          <p class="eyebrow">Calendrier</p>
+          <h2>Le mois d'un coup d'œil</h2>
+          <p>Le calendrier du mois montre les jours saisis d'un point orange : un oubli se repère
+             tout de suite, et se rattrape en quelques secondes.</p>
+          <ul>
+            <li>Semaine en cours toujours visible</li>
+            <li>Jours fériés français intégrés</li>
+            <li>Jours passés modifiables tant que le mois n'est pas envoyé</li>
+          </ul>
+        </div>
+        <div class="media">
+          <img class="phone small" src="img/calendrier.jpg" width="600" height="1200" loading="lazy"
+               alt="Calendrier de septembre avec les jours saisis marqués">
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="text">
+          <p class="eyebrow">Rappels intelligents</p>
+          <h2>Enregistrez depuis la notification</h2>
+          <p>Chaque projet a son rappel : jours, heure et valeur proposée. Le soir, un bouton
+             « Enregistrer » suffit, sans même ouvrir l'application.</p>
+          <ul>
+            <li>Pas de rappel si le temps est déjà saisi</li>
+            <li>Silence les jours fériés et les jours de congé</li>
+            <li>« Autre valeur » ouvre directement la saisie du jour</li>
+          </ul>
+        </div>
+        <div class="media stack">
+          <img class="notif" src="img/notification.jpg" width="900" height="344" loading="lazy"
+               alt="Notification CROA : Refonte site e-commerce, enregistrer 1 jour ? Boutons Enregistrer et Autre valeur">
+          <img class="phone small" src="img/projet.jpg" width="600" height="1200" loading="lazy"
+               alt="Fiche projet : fraction de saisie et réglage du rappel">
+        </div>
+      </div>
+
+      <div class="feature flip">
+        <div class="text">
+          <p class="eyebrow">Compte rendu mensuel</p>
+          <h2>Votre CR en PDF, prêt à envoyer</h2>
+          <p>Un compte rendu par client, avec le détail des jours et le montant à facturer.
+             Votre application mail s'ouvre avec le client en destinataire et le PDF en pièce jointe.</p>
+          <ul>
+            <li>Tarif horaire, journalier ou forfait</li>
+            <li>HT, TVA et TTC selon votre régime, ou franchise en base</li>
+            <li>Le mois envoyé est verrouillé contre les modifications involontaires</li>
+          </ul>
+        </div>
+        <div class="media">
+          <img class="phone small" src="img/temps.jpg" width="600" height="1200" loading="lazy"
+               alt="Écran Temps : 18,75 jours et 10 312,50 € HT en septembre pour le client Studio Horizon">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <p class="eyebrow">Et aussi</p>
+      <h2>Tout ce qu'il faut, rien de plus</h2>
+      <div class="grid">
+        <div class="tile"><h3>Projets et clients</h3><p>Couleur par projet, dates de début et de fin, adresse mail du client.</p></div>
+        <div class="tile"><h3>Suivi de l'activité</h3><p>Temps et montants par mois, par année ou sur une période libre, filtrés par client.</p></div>
+        <div class="tile"><h3>Heures ou jours</h3><p>Choisissez l'unité de chaque projet et la fraction de saisie qui vous convient.</p></div>
+        <div class="tile"><h3>Profil prestataire</h3><p>Nom, SIRET et régime de TVA repris sur le PDF, si vous le souhaitez.</p></div>
+        <div class="tile"><h3>Sauvegarde</h3><p>Exportez et restaurez vos données dans un fichier que vous rangez où vous voulez.</p></div>
+        <div class="tile"><h3>Clair ou sombre</h3><p>CROA suit le thème de votre téléphone, ou celui que vous choisissez.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="privacy" id="confidentialite">
+    <div class="wrap">
+      <p class="eyebrow">Vos données</p>
+      <h2>Elles restent sur votre téléphone</h2>
+      <div class="grid">
+        <div class="tile"><h3>Aucun compte</h3><p>Pas d'inscription, pas de mot de passe : ouvrez l'application et créez votre premier projet.</p></div>
+        <div class="tile"><h3>Aucune publicité</h3><p>Ni publicité, ni mesure d'audience, ni envoi de vos données à l'éditeur.</p></div>
+        <div class="tile"><h3>Vous décidez</h3><p>Un PDF ou une sauvegarde ne quitte le téléphone que lorsque vous le partagez.</p></div>
+      </div>
+      <p class="more">Détails dans la <a href="confidentialite.html">politique de confidentialité</a>.</p>
+    </div>
+  </section>
+
+  <section class="test" id="tester">
+    <div class="wrap">
+      <p class="eyebrow">Phase de test</p>
+      <h2>Envie de l'essayer avant tout le monde ?</h2>
+      <p>CROA est en test sur Android avant sa sortie sur Google Play. Écrivez-moi avec l'adresse Gmail
+         de votre téléphone : je vous ajoute à la liste des testeurs et vous envoie le lien d'installation.</p>
+      <a class="btn primary" href="mailto:cyanninfo@gmail.com?subject=Tester%20CROA">Demander à tester</a>
+    </div>
+  </section>
 </main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 CyannInfo – Yann TRIQUET</span>
+    <span><a href="confidentialite.html">Politique de confidentialité</a> · <a href="mailto:cyanninfo@gmail.com">Contact</a> · <a href="https://www.cyanninfo-freelance.com">cyanninfo-freelance.com</a></span>
+  </div>
+</footer>
+
 </body>
 </html>
