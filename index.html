@@ -94,6 +94,12 @@
   /* Tester */
   .test { text-align: center; }
   .test p { color: var(--muted); max-width: 40em; margin: 0 auto 26px; }
+  .test p.mail { margin-bottom: 20px; }
+  .test p.mail strong { font: 800 26px/1.2 M; color: var(--text); user-select: all; word-break: break-all; }
+  .test p.small { margin: 16px auto 0; font-size: 15px; }
+  .cta.center { justify-content: center; }
+  button.btn { border: 0; cursor: pointer; }
+  .btn.outline { border: 2px solid var(--rule); color: var(--text); }
 
   footer { border-top: 1px solid var(--rule); padding: 28px 0 40px; color: var(--muted); font-size: 15px; }
   footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; }
@@ -285,9 +291,26 @@
     <div class="wrap">
       <p class="eyebrow">Phase de test</p>
       <h2>Envie de l'essayer avant tout le monde ?</h2>
-      <p>CROA est en test sur Android avant sa sortie sur Google Play. Écrivez-moi avec l'adresse Gmail
-         de votre téléphone : je vous ajoute à la liste des testeurs et vous envoie le lien d'installation.</p>
-      <a class="btn primary" href="mailto:cyanninfo@gmail.com?subject=Tester%20CROA">Demander à tester</a>
+      <p>CROA est en test sur Android avant sa sortie sur Google Play. Écrivez-moi à l'adresse ci&#8209;dessous
+         en indiquant l'adresse Gmail de votre téléphone : je vous ajoute à la liste des testeurs et vous
+         envoie le lien d'installation.</p>
+      <p class="mail"><strong id="adresse">cyanninfo@gmail.com</strong></p>
+      <div class="cta center">
+        <button class="btn primary" id="copier" type="button">Copier l'adresse</button>
+        <a class="btn outline" href="https://mail.google.com/mail/?view=cm&amp;to=cyanninfo@gmail.com&amp;su=Tester%20CROA"
+           target="_blank" rel="noopener">Écrire avec Gmail</a>
+      </div>
+      <p class="small">ou avec <a href="mailto:cyanninfo@gmail.com?subject=Tester%20CROA">votre application de messagerie</a></p>
+      <script>
+        // Copie de l'adresse dans le presse-papiers ; sélection du texte si la copie est refusée.
+        document.getElementById('copier').addEventListener('click', async (e) => {
+          const b = e.currentTarget, t = document.getElementById('adresse').textContent;
+          try { await navigator.clipboard.writeText(t); b.textContent = 'Adresse copiée ✓'; }
+          catch { const r = document.createRange(); r.selectNodeContents(document.getElementById('adresse'));
+                  getSelection().removeAllRanges(); getSelection().addRange(r); b.textContent = 'Faites Ctrl+C'; }
+          setTimeout(() => b.textContent = "Copier l'adresse", 2500);
+        });
+      </script>
     </div>
   </section>
 </main>
@@ -295,7 +318,7 @@
 <footer>
   <div class="wrap">
     <span>© 2026 CyannInfo – Yann TRIQUET</span>
-    <span><a href="confidentialite.html">Politique de confidentialité</a> · <a href="mailto:cyanninfo@gmail.com">Contact</a> · <a href="https://www.cyanninfo-freelance.com">cyanninfo-freelance.com</a></span>
+    <span><a href="confidentialite.html">Politique de confidentialité</a> · Contact : cyanninfo@gmail.com · <a href="https://www.cyanninfo-freelance.com">cyanninfo-freelance.com</a></span>
   </div>
 </footer>
 
