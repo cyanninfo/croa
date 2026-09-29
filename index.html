@@ -95,6 +95,11 @@
   .test { text-align: center; }
   .test p { color: var(--muted); max-width: 40em; margin: 0 auto 26px; }
   .test p.mail { margin-bottom: 20px; }
+  .note { max-width: 40em; margin: 0 auto 30px; padding: 16px 20px; border-radius: 16px; text-align: left;
+          background: var(--card); border-left: 5px solid var(--orange); color: var(--text); font-size: 16px; }
+  .already { margin: 18px 0 0; max-width: 34em; padding: 12px 16px; border-radius: 12px;
+             background: rgba(242,140,40,.12); color: #E8EDF5; font-size: 15px; }
+  @media (max-width: 820px) { .already { margin-left: auto; margin-right: auto; text-align: left; } }
   .test p.mail strong { font: 800 26px/1.2 M; color: var(--text); user-select: all; word-break: break-all; }
   .test p.small { margin: 16px auto 0; font-size: 15px; }
   .cta.center { justify-content: center; }
@@ -162,9 +167,11 @@
           freelances et consultants : notez vos jours ou vos heures chaque soir, et votre compte rendu
           d'activité mensuel est prêt à envoyer au client.</p>
         <div class="cta">
-          <a class="btn primary" href="#tester">Devenir testeur</a>
+          <a class="btn primary" href="#tester">Demander à tester</a>
           <a class="btn ghost" href="#fonctionnalites">Découvrir</a>
         </div>
+        <p class="already">✅ <b>Vous avez reçu le lien d'installation par mail ?</b> Vous êtes déjà testeur :
+          inutile de demander, installez directement avec le lien reçu.</p>
         <p class="soon">Bientôt sur Google Play · Gratuite, sans publicité, sans compte à créer</p>
       </div>
       <div class="shot duo">
@@ -294,6 +301,11 @@
       <p>CROA est en test sur Android avant sa sortie sur Google Play. Écrivez-moi à l'adresse ci&#8209;dessous
          en indiquant l'adresse Gmail de votre téléphone : je vous ajoute à la liste des testeurs et vous
          envoie le lien d'installation.</p>
+      <div class="note">
+        <b>Déjà testeur ?</b> Si vous avez reçu le mail avec le lien d'installation, vous êtes déjà inscrit :
+        ignorez cette section, ouvrez simplement ce lien <b>sur votre téléphone Android</b>, acceptez l'invitation
+        puis installez l'appli depuis Google Play.
+      </div>
       <p class="mail"><strong id="adresse">cyanninfo@gmail.com</strong></p>
       <div class="cta center">
         <button class="btn primary" id="copier" type="button">Copier l'adresse</button>
