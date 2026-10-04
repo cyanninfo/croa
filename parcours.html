@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CROA – Parcours testeur</title>
+<meta name="description" content="Votre première utilisation de CROA, pas à pas : choisissez votre profil, suivez les étapes, puis donnez votre avis.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="img/icone.png">
+<style>
+  @font-face { font-family: M; src: url(fonts/Montserrat-Bold.ttf); font-weight: 700; font-display: swap; }
+  @font-face { font-family: N; src: url(fonts/NunitoSans-Regular.ttf); font-weight: 400; font-display: swap; }
+  :root { --navy: #0B1D3A; --navy2: #12294F; --orange: #F28C28; --bg: #F4F6FA; --card: #FFFFFF; --text: #0B1D3A;
+          --muted: #5A6782; --rule: #D5DCE8; --chip: #E8EDF5; --ok: #1E6B3F; --okbg: #E3F4EA; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0A111F; --card: #152036; --text: #E8EDF5; --muted: #9AA8C2; --rule: #2A3752; --chip: #1C2A45; --ok: #8FE0B0; --okbg: #173A28; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 N, "Segoe UI", system-ui, sans-serif; }
+  a { color: var(--orange); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+  .top { background: var(--navy); color: #fff; padding-bottom: 24px; }
+  nav { display: flex; align-items: center; gap: 12px; padding: 16px 0; }
+  nav a { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font: 700 22px/1 M; }
+  nav img { width: 40px; height: 40px; border-radius: 12px; }
+  nav span span { color: var(--orange); }
+  h1 { margin: 16px 0 8px; font: 700 28px/1.2 M; }
+  .lead { margin: 0; color: #C9D5EA; }
+  .bar { margin-top: 20px; height: 12px; border-radius: 8px; background: var(--navy2); overflow: hidden; }
+  .bar div { height: 100%; width: 0; background: var(--orange); border-radius: 8px; transition: width .3s; }
+  .count { margin-top: 8px; font: 700 13px/1 M; color: #C9D5EA; }
+  main { padding: 24px 0 48px; }
+  h2 { font: 700 20px/1.3 M; margin: 0 0 12px; }
+  .profiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; margin-bottom: 32px; }
+  .profiles button { text-align: left; padding: 12px 16px; border-radius: 16px; border: 2px solid var(--rule); background: var(--card);
+                     color: var(--text); font: 700 16px/1.3 M; cursor: pointer; }
+  .profiles button small { display: block; font: 400 13px/1.4 N; color: var(--muted); margin-top: 4px; }
+  .profiles button[aria-pressed="true"] { border-color: var(--orange); }
+  .step { background: var(--card); border-radius: 24px; padding: 24px; margin-bottom: 16px; border: 2px solid transparent; }
+  .step.done { border-color: var(--okbg); }
+  .step header { display: flex; gap: 12px; align-items: flex-start; }
+  .num { width: 36px; height: 36px; flex-shrink: 0; border-radius: 12px; display: grid; place-items: center; background: var(--chip); font: 700 16px/1 M; }
+  .step.done .num { background: var(--okbg); color: var(--ok); }
+  .step h3 { margin: 4px 0 0; font: 700 16px/1.3 M; }
+  .step ol, .step ul { margin: 12px 0 0; padding-left: 22px; }
+  .step li { margin: 4px 0; }
+  .tip { margin-top: 12px; padding: 12px 16px; border-radius: 16px; background: var(--chip); font-size: 15px; }
+  .tip b { font-family: M; }
+  .check { margin-top: 16px; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 16px;
+           border: 2px solid var(--rule); cursor: pointer; font: 700 15px/1.3 M; }
+  .check input { width: 24px; height: 24px; accent-color: var(--orange); }
+  .step.done .check { border-color: var(--ok); color: var(--ok); }
+  details { margin-top: 12px; }
+  summary { cursor: pointer; color: var(--muted); font-size: 15px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 15px; }
+  td { padding: 8px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  td:first-child { color: var(--muted); width: 38%; }
+  .finish { text-align: center; background: var(--navy); color: #fff; border-radius: 24px; padding: 32px 24px; margin-top: 24px; }
+  .finish h2 { color: #fff; font-size: 24px; }
+  .finish p { color: #C9D5EA; }
+  .btn { display: inline-block; margin-top: 8px; padding: 16px 24px; border-radius: 16px; background: var(--orange); color: var(--navy);
+         font: 700 16px/1 M; text-decoration: none; }
+  .reset { background: none; border: 0; color: var(--muted); text-decoration: underline; cursor: pointer; font-size: 14px; margin-top: 16px; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <nav><a href="./"><img src="img/icone.png" alt=""><span>CRO<span>A</span></span></a></nav>
+    <h1>Votre première utilisation, pas à pas</h1>
+    <p class="lead">Une dizaine de petites étapes pour découvrir CROA comme dans la vraie vie. Cochez chaque étape réussie :
+      votre progression est gardée sur ce navigateur. À la fin, donnez-nous votre avis en 3 minutes.</p>
+    <div class="bar" aria-hidden="true"><div id="bar"></div></div>
+    <div class="count" id="count">0 étape réussie</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <h2>1. Choisissez votre profil</h2>
+  <div class="profiles" id="profiles" role="group" aria-label="Profil">
+    <button data-p="it" aria-pressed="false">💻 Prestataire informatique<small>Missions facturées à la journée</small></button>
+    <button data-p="nounou" aria-pressed="false">🧸 Garde d'enfants<small>Un projet par enfant, à l'heure</small></button>
+    <button data-p="jardin" aria-pressed="false">🌿 Paysagiste<small>Passages chez plusieurs clients</small></button>
+    <button data-p="menage" aria-pressed="false">🧽 Ménage à domicile<small>Quelques heures chez chacun</small></button>
+    <button data-p="coach" aria-pressed="false">🎓 Coach, formateur<small>Séances et accompagnements</small></button>
+    <button data-p="decouverte" aria-pressed="false">🔍 Je découvre<small>Avec un projet fictif</small></button>
+  </div>
+
+  <div id="steps" class="hidden">
+    <section class="step" data-s="install">
+      <header><div class="num">1</div><h3>Installer CROA</h3></header>
+      <ol>
+        <li>Ouvrez le lien d'installation reçu par mail <b>sur votre téléphone Android</b>.</li>
+        <li>« Accepter l'invitation », puis « Télécharger sur Google Play », puis « Installer ».</li>
+      </ol>
+      <p class="tip"><b>Ça coince ?</b> « Application introuvable » : attendez quelques minutes et réessayez — votre inscription comme testeur se propage.</p>
+      <label class="check"><input type="checkbox"> CROA est installée</label>
+    </section>
+
+    <section class="step" data-s="projet">
+      <header><div class="num">2</div><h3>Créer votre premier projet</h3></header>
+      <p>À la première ouverture, CROA propose directement de créer un projet. Pour votre profil :</p>
+      <table id="setup"></table>
+      <p class="tip"><b>Astuce :</b> le client et le tarif sont dans « Facultatif » en bas du formulaire. À la fin, acceptez le
+        <b>rappel de saisie</b> puis <b>autorisez les notifications</b> : c'est ce qui fera sonner le rappel du soir.</p>
+      <label class="check"><input type="checkbox"> Mon projet est créé</label>
+    </section>
+
+    <section class="step" data-s="aujourdhui">
+      <header><div class="num">3</div><h3>Saisir votre journée</h3></header>
+      <ol>
+        <li>Sur l'écran Aujourd'hui, touchez un bouton rapide (<span class="ex-value">1</span>).</li>
+        <li>Touchez « Enregistrer la journée ».</li>
+      </ol>
+      <p class="tip"><b>À observer :</b> une pastille verte « ✓ Enregistré : … » nomme le projet et la valeur, avec une petite vibration. Un point apparaît sous le jour.</p>
+      <label class="check"><input type="checkbox"> J'ai vu la pastille « Enregistré »</label>
+    </section>
+
+    <section class="step" data-s="passe">
+      <header><div class="num">4</div><h3>Rattraper un jour oublié</h3></header>
+      <ol>
+        <li>Touchez un jour passé dans la bande de la semaine, ou ouvrez le <b>calendrier du mois</b> (icône calendrier en haut à droite).</li>
+        <li>Saisissez une valeur et enregistrez. Revenez avec « Revenir à aujourd'hui ».</li>
+      </ol>
+      <p class="tip"><b>À observer :</b> les jours saisis portent un point orange dans le calendrier.</p>
+      <label class="check"><input type="checkbox"> J'ai rattrapé un jour passé</label>
+    </section>
+
+    <section class="step" data-s="second">
+      <header><div class="num">5</div><h3>Ajouter un deuxième projet</h3></header>
+      <p id="second-text">Onglet Projets, « + Nouveau ».</p>
+      <p class="tip"><b>À observer :</b> sur l'écran Aujourd'hui, « 2 projets pour ce jour » s'affiche, une carte par projet. Saisissez sur la <b>deuxième</b> carte et vérifiez que le message nomme le bon projet.</p>
+      <label class="check"><input type="checkbox"> J'ai saisi sur deux projets</label>
+    </section>
+
+    <section class="step" data-s="rappel">
+      <header><div class="num">6</div><h3>Recevoir un rappel de saisie</h3></header>
+      <ol>
+        <li>Onglet Projets, « ⋯ » sur un projet, « Modifier » : section <b>Rappel de saisie</b>.</li>
+        <li>Choisissez l'heure : dans quelques minutes, pour un jour pas encore saisi (ou gardez 18 h et attendez ce soir).</li>
+        <li>Quand la notification arrive : touchez <b>Enregistrer</b>, sans ouvrir l'application.</li>
+      </ol>
+      <p class="tip"><b>À savoir :</b> ce n'est pas un rappel d'agenda, mais un rappel pour noter votre temps. Android peut le décaler de quelques minutes ; pas de rappel un jour déjà saisi, de congé ou férié.</p>
+      <label class="check"><input type="checkbox"> J'ai enregistré depuis la notification</label>
+    </section>
+
+    <section class="step" data-s="temps">
+      <header><div class="num">7</div><h3>Consulter vos temps</h3></header>
+      <ol>
+        <li>Onglet <b>Temps</b> : vue Mois, puis Année (graphique par mois).</li>
+        <li>Touchez « Tous projets » pour filtrer par client ou par projet.</li>
+      </ol>
+      <label class="check"><input type="checkbox"> J'ai retrouvé mes temps et le montant</label>
+    </section>
+
+    <section class="step" data-s="cr">
+      <header><div class="num">8</div><h3>Envoyer le compte rendu du mois</h3></header>
+      <ol>
+        <li>Temps, vue Mois, filtre sur un <b>client</b>, puis « Exporter le CR (PDF) ».</li>
+        <li>Envoyez-le <b>à vous-même</b> (mettez votre propre adresse mail sur le client de test).</li>
+      </ol>
+      <p class="tip"><b>À savoir :</b> l'export verrouille le mois de ce client ; « Déverrouiller » dans l'onglet Temps le rend de nouveau modifiable.</p>
+      <label class="check"><input type="checkbox"> J'ai reçu mon CR en PDF</label>
+    </section>
+
+    <section class="step" data-s="sauvegarde">
+      <header><div class="num">9</div><h3>Mettre vos données à l'abri</h3></header>
+      <p>Réglages, section Sauvegarde, « Exporter » : rangez le fichier dans vos fichiers ou votre Drive. Vos données ne sont que sur votre téléphone.</p>
+      <label class="check"><input type="checkbox"> J'ai exporté une sauvegarde</label>
+    </section>
+
+    <section class="step" data-s="usage">
+      <header><div class="num">10</div><h3>Utiliser CROA quelques jours</h3></header>
+      <p>Le vrai test, c'est la vie réelle : saisissez vos temps 3 à 5 jours de suite, avec le rappel du soir. Notez ce qui vous plaît, ce qui vous gêne ou ce qui manque.</p>
+      <label class="check"><input type="checkbox"> J'ai utilisé CROA plusieurs jours</label>
+    </section>
+
+    <div class="finish" id="finish">
+      <h2 id="finish-title">Merci de tester CROA</h2>
+      <p id="finish-text">Même si vous n'avez pas tout fait, votre avis compte : 3 minutes, et c'est anonyme si vous le souhaitez.</p>
+      <a class="btn" id="form" href="https://forms.gle/A-REMPLACER" target="_blank" rel="noopener">Donner mon avis</a>
+      <div><button class="reset" id="reset" type="button">Recommencer le parcours</button></div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const P = {
+    it: { value: '1', rows: [['Nom', 'Votre mission (ex. « Refonte extranet »)'], ['Tarification', 'Journalier, saisie en jours'], ['Fraction', '0,25 j (ou 0,5 j)'], ['Client', 'L\'ESN ou l\'entreprise, avec votre propre mail pour le test'], ['Tarif', 'Votre TJM HT']], second: 'Onglet Projets, « + Nouveau » : une deuxième mission, ou un projet « Avant-vente » sans client.' },
+    nounou: { value: '8', rows: [['Nom', 'Le prénom de l\'enfant (ex. « Léa »)'], ['Tarification', 'Horaire'], ['Fraction', '0,5 h'], ['Client', 'La famille (ex. « Famille Martin »)'], ['Tarif', 'Facultatif : laissez vide pour suivre les heures seules']], second: 'Onglet Projets, « + Nouveau » : un deuxième enfant, de la même famille ou d\'une autre.' },
+    jardin: { value: '3', rows: [['Nom', 'Le contrat (ex. « Entretien Durand »)'], ['Tarification', 'Horaire'], ['Fraction', '1 h (ou 0,5 h)'], ['Client', 'Le particulier ou le syndic'], ['Tarif', 'Votre tarif horaire HT']], second: 'Onglet Projets, « + Nouveau » : un autre client de votre tournée.' },
+    menage: { value: '3', rows: [['Nom', 'Le foyer (ex. « Ménage Bernard »)'], ['Tarification', 'Horaire'], ['Fraction', '0,5 h'], ['Client', 'Le particulier'], ['Tarif', 'Facultatif']], second: 'Onglet Projets, « + Nouveau » : un deuxième foyer.' },
+    coach: { value: '2', rows: [['Nom', 'L\'action (ex. « Coaching Paul » ou « Formation Excel »)'], ['Tarification', 'Horaire (ou journalier pour des demi-journées)'], ['Fraction', '1 h, ou 0,5 j'], ['Client', 'L\'organisme ou la personne'], ['Tarif', 'Votre tarif HT']], second: 'Onglet Projets, « + Nouveau » : un deuxième accompagnement ou organisme.' },
+    decouverte: { value: '1', rows: [['Nom', '« Projet test »'], ['Tarification', 'Journalier, saisie en jours'], ['Fraction', '0,25 j'], ['Client', '« Client test », avec votre propre mail'], ['Tarif', '500 € HT (fictif)']], second: 'Onglet Projets, « + Nouveau » : « Projet test 2 », en horaire cette fois.' }
+  };
+  const KEY = 'croa-parcours';
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
+  const save = s => { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch {} };
+  let state = load();
+  const steps = [...document.querySelectorAll('.step')];
+
+  function render() {
+    document.querySelectorAll('#profiles button').forEach(b => b.setAttribute('aria-pressed', b.dataset.p === state.profile));
+    document.getElementById('steps').classList.toggle('hidden', !state.profile);
+    if (state.profile) {
+      const p = P[state.profile];
+      document.getElementById('setup').innerHTML = p.rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
+      document.querySelector('.ex-value').textContent = p.value;
+      document.getElementById('second-text').textContent = p.second;
+    }
+    const done = state.done || {};
+    steps.forEach(s => { const ok = !!done[s.dataset.s]; s.classList.toggle('done', ok); s.querySelector('input').checked = ok; });
+    const n = steps.filter(s => done[s.dataset.s]).length;
+    document.getElementById('bar').style.width = (100 * n / steps.length) + '%';
+    document.getElementById('count').textContent = n + (n > 1 ? ' étapes réussies' : ' étape réussie') + ' sur ' + steps.length;
+    const all = n === steps.length;
+    document.getElementById('finish-title').textContent = all ? 'Bravo, parcours terminé ! 🎉' : 'Merci de tester CROA';
+    document.getElementById('finish-text').textContent = all
+      ? 'Vous avez fait le tour de CROA. Dites-nous en 3 minutes ce qui vous a plu et ce qui vous a gêné.'
+      : 'Même si vous n\'avez pas tout fait, votre avis compte : 3 minutes, et c\'est anonyme si vous le souhaitez.';
+  }
+
+  document.getElementById('profiles').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    state.profile = b.dataset.p; save(state); render();
+    document.getElementById('steps').scrollIntoView({ behavior: 'smooth' });
+  });
+  steps.forEach(s => s.querySelector('input').addEventListener('change', e => {
+    state.done = state.done || {}; state.done[s.dataset.s] = e.target.checked; save(state); render();
+  }));
+  document.getElementById('reset').addEventListener('click', () => { state = {}; save(state); render(); window.scrollTo({ top: 0 }); });
+  render();
+</script>
+</body>
+</html>
